@@ -1,0 +1,10 @@
+body{
+  margin: 0;
+}
+
+.App {
+  display: flex;
+  height: 100vh;
+  background-color: #141414;
+  font-family: "Helvetica Neue", sans-serif;
+}
