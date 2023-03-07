@@ -14,27 +14,50 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 app.get("/", async (req, res) => {
-  res.status(200).send("Hi");
+  res.status(200).send("HI");
 });
 
-app.post("/", async (req, res) => {
+app.post("/songs", async (req, res) => {
   try {
-    const prompt = req.body.prompt;
-    // const prompt = "give me some summer vibe songs";
-
+    const prompt = `Hello AI, I need your help to find some music that matches my current mood. I'll write my current emotional state, and we need you to suggest some songs that match the mood I've described. Please make your recommendations as personalized and accurate as possible, based on my input. And the music you recommend should be in Spotify as well. AI, Don't write anything only list of songs
+    So my mood is ${req.body.prompt}`;
+    console.log(prompt);
     const response = await openai.createCompletion({
-      model: "text-babbage-001",
+      model: "text-davinci-003",
       prompt: `${prompt}`,
-      temperature: 0.7,
-      max_tokens: 1500,
+      temperature: 0.9,
+      max_tokens: 500,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
     });
 
-    res.status(200).send({
-      answer: response.data.choices[0].text,
-    });
+    let songs = response.data.choices[0].text
+      .split("\n")
+      .filter((s) => s.trim().length > 0);
+    let newSongs = [];
+
+    for (let i = 0; i < songs.length; i++) {
+      let song = songs[i].trim().match(/^(\d+)\.\s+"(.+)"\s+by\s+(.+)$/);
+
+      if (song) {
+        newSongs.push({
+          id: parseInt(song[1]),
+          songName: song[2],
+          artist: song[3],
+        });
+      }
+    }
+
+    let result = {
+      songs: newSongs,
+    };
+
+    console.log(response.data.choices[0].text);
+
+    console.log(result);
+
+    res.status(200).send(result);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
