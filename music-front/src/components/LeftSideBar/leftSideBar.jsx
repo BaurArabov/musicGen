@@ -1,15 +1,5 @@
-// import "./index.css";
-
-// export default function LeftSideBar() {
-//   return (
-//     <div>
-//       <img src="" alt="profile" />
-//     </div>
-//   );
-// }
-
 import React from "react";
-import "./index.css";
+import "./leftSideBar.css";
 import foto from "../../assets/profile-foto.png";
 
 function LeftSideBar() {
