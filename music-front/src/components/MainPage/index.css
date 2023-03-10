@@ -92,3 +92,17 @@
   .buttons button:focus {
     color: red;
   }
+
+  .close {
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .close:hover{
+    color: rgb(199, 194, 194);
+  }
+
+  .close:active{
+    transform: translateY(1px);
+  }

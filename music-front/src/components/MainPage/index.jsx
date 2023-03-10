@@ -1,45 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import Search from "../../assets/white-magnifying-glass-icon-png-14.jpg";
+import axios from "axios";
 
 function Main() {
-  let songsData = [
-    {
-      id: 1,
-      name: "Summertime",
-      artist: "Katrina and the Waves",
-    },
-    {
-      id: 2,
-      name: "Can't Stop the Feeling!",
-      artist: "Justin Timberlake",
-    },
-    {
-      id: 3,
-      name: "The Dance",
-      artist: "Bon Iver",
-    },
-  ];
+  const [songs, setSongs] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [songs, setSongs] = useState([]);
+  const handleChangeInput = (event) => {
+    console.log(event.target.value);
+    setInputValue(event.target.value);
+  };
 
-  // const handleSearch = async (event) => {
-  //   if (event.key === "Enter") {
-  //     const response = await fetch("http://localhost:8080/");
-  //     const data = await response.json();
-  //     const filteredSongs = data.filter(
-  //       (song) =>
-  //         song.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //         song.artist.toLowerCase().includes(searchTerm.toLowerCase())
-  //     );
-  //     setSongs(filteredSongs);
-  //   }
-  // };
+  const handleKeyDown = async (event) => {
+    console.log(songs);
+    if (inputValue === "") return;
+    if (event.key === "Enter") {
+      const response = await axios.post("http://localhost:8080/songs", {
+        mood: inputValue,
+      });
+      setSongs(response.data.songs);
+    }
+  };
 
-  // const handleChange = (event) => {
-  //   setSearchTerm(event.target.value);
-  // };
+  const handleClear = () => {
+    setInputValue("");
+  };
 
   return (
     <div className="main-content">
@@ -49,9 +35,13 @@ function Main() {
           <input
             type="text"
             placeholder="Write your mood"
-            // onKeyPress={handleSearch}
-            // onChange={handleChange}
+            value={inputValue}
+            onChange={handleChangeInput}
+            onKeyDown={handleKeyDown}
           />
+          <span className="close" onClick={handleClear}>
+            &times;
+          </span>
         </div>
         <div className="buttons">
           <button>Home</button>
@@ -59,15 +49,18 @@ function Main() {
           <button>Radio</button>
         </div>
       </div>
-      <div className="content">
-        <ul>
-          {songsData.map((song) => (
-            <li key={song.id}>
-              {song.name} - {song.artist}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {songs !== "" && (
+        <div className="content">
+          <h2>Related to your mood: {inputValue}</h2>
+          <ul>
+            {songs.map((song) => (
+              <li key={song.id}>
+                {song.songName} - {song.artist}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

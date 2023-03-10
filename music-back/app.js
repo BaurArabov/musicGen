@@ -1,10 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import { Configuration, OpenAIApi } from "openai";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
 app.use(express.json());
 
 const configuration = new Configuration({
@@ -19,14 +24,16 @@ app.get("/", async (req, res) => {
 
 app.post("/songs", async (req, res) => {
   try {
-    const prompt = `Hello AI, I need your help to find some music that matches my current mood. I'll write my current emotional state, and we need you to suggest some songs that match the mood I've described. Please make your recommendations as personalized and accurate as possible, based on my input. And the music you recommend should be in Spotify as well. AI, Don't write anything only list of songs
-    So my mood is ${req.body.prompt}`;
+    const prompt = `Hello AI, I need your help to find some music that matches my current mood. I'll write my current emotional state, and we need you to suggest some songs that match the mood I've described. Please make your recommendations as personalized and accurate as possible, based on my input. Recommended songs must be in Spotify. AI, don't write anything, give me list of 20 songs.
+So my mood is ${req.body.mood}`;
+
     console.log(prompt);
+
     const response = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: `${prompt}`,
       temperature: 0.9,
-      max_tokens: 500,
+      max_tokens: 1200,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
@@ -52,7 +59,6 @@ app.post("/songs", async (req, res) => {
     let result = {
       songs: newSongs,
     };
-
     console.log(response.data.choices[0].text);
 
     console.log(result);
