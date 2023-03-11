@@ -19,14 +19,8 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-// app.get("/", async (req, res) => {
-//   res.status(200).send("HI");
-// });
-
 app.post("/login", (req, res) => {
   const code = req.body.code;
-
-  // console.log("code from front is  " + code);
 
   const spotifyApi = new SpotifyWebApi({
     clientId: process.env.CLIENT_ID,
