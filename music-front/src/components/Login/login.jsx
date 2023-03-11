@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 
 const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=33665286bad84fc388bdc384fc451680" +
+  "https://accounts.spotify.com/authorize?client_id=f1852176c62742a9b025224b84f0506f" +
   "&response_type=code&redirect_uri=http://localhost:5173" +
   "&scope=streaming" +
   "%20user-read-email" +
