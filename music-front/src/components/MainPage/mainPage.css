@@ -106,3 +106,23 @@
   .close:active{
     transform: translateY(1px);
   }
+
+
+  .list-songs::-webkit-scrollbar{
+    width:5px;
+    background-color:#000;
+  }
+    
+  .list-songs::-webkit-scrollbar-thumb{
+    background:red;
+    border-radius: 5px;
+  }
+
+  .spot-player{
+    padding-top: 10px;
+    width: 75%;
+    position: absolute;
+    bottom: 0;
+  }
+
+  
